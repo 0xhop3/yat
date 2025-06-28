@@ -3,6 +3,7 @@ package repositories
 import (
 	"database/sql"
 
+	"github.com/0xhop3/yat/backend/internal/models"
 	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
 )
