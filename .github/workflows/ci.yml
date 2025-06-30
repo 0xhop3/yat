@@ -15,19 +15,22 @@ jobs:
         with:
           go-version: '1.24.4'
           cache: true
-      - name: Checkout Backend
-        run: cd backend
       - name: Go mod verification
         run: |
+          cd backend
           go mod tidy
           git diff --exit-code go.mod go.sum
       - name: Go vet
         run: |
+          cd backend
           go vet ./...
       - name: Format Go Code
-        run: gofmt -s -w
+        run: |
+          cd backend
+          gofmt -s -w
       - name: Go fmt check
         run: |
+          cd backend
           if [ "$(gofmt -s -l . | wc -l)" -gt 0 ]; then
             echo "❌ Code is not formatted. Run 'gofmt -s -w .'"
             gofmt -s -l .
