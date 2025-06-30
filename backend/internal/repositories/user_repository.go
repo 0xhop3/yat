@@ -12,8 +12,8 @@ type UserRepository struct {
 }
 
 const (
-	userCreateQuery        = `INSERT INTO yat_users (id, auth0_id, username, name, created_at, updated_at) VALUES ($1, $2, $3, $4, NOW(), NOW()) RETURNING created_at, updated_at`
-	userGetByUsernameQuery = `SELECT * FROM yat_users WHERE username = $1`
+	userCreateQuery       = `INSERT INTO yat_users (id, auth0_id, username, name, created_at, updated_at) VALUES ($1, $2, $3, $4, NOW(), NOW()) RETURNING created_at, updated_at`
+	userGetByAuth0IDQuery = `SELECT * FROM yat_users WHERE auth0_id = $1`
 )
 
 func NewUserRepository(db *sqlx.DB) *UserRepository {
@@ -30,9 +30,9 @@ func (u *UserRepository) Create(user *models.User) error {
 		user.UpdatedAt).Scan(&user.CreatedAt, user.CreatedAt)
 }
 
-func (u *UserRepository) GetByUsername(username string) (*models.User, error) {
+func (u *UserRepository) GetByAuth0ID(auth0_id string) (*models.User, error) {
 	user := &models.User{}
-	err := u.db.Get(user, userGetByUsernameQuery, username)
+	err := u.db.Get(user, userGetByAuth0IDQuery, auth0_id)
 	if err == sql.ErrNoRows {
 		return nil, nil
 	}

@@ -17,7 +17,7 @@ func NewUserService(userRepo *repositories.UserRepository) *UserService {
 }
 
 func (u *UserService) CreateUser(request *models.CreateUserRequest) (*models.User, error) {
-	existingUser, err := u.userRepo.GetByUsername(request.Username)
+	existingUser, err := u.userRepo.GetByAuth0ID(request.Auth0ID)
 	if err != nil {
 		return nil, err
 	}
@@ -33,6 +33,15 @@ func (u *UserService) CreateUser(request *models.CreateUserRequest) (*models.Use
 	}
 
 	err = u.userRepo.Create(user)
+	if err != nil {
+		return nil, err
+	}
+
+	return user, nil
+}
+
+func (u *UserService) GetByAuth0ID(auth0ID string) (*models.User, error) {
+	user, err := u.userRepo.GetByAuth0ID(auth0ID)
 	if err != nil {
 		return nil, err
 	}
