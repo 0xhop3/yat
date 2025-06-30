@@ -39,8 +39,8 @@ jobs:
       - name: Download dependencies
         run: go mod download
       - name: Go security check
-        uses: securego/gosec@master
-        with:
-          args: ./...
+        run: |
+          go install github.com/securego/gosec/v2/cmd/gosec@latest
+          gosec ./...
       - name: Docker compose Validation
         run: "docker compose config -q \necho \"✅ Docker compose file is valid\"\n"
