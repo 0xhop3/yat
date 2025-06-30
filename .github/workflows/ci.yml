@@ -15,13 +15,15 @@ jobs:
         with:
           go-version: '1.24.4'
           cache: true
+      - name: Checkout Backend
+        run: cd backend
       - name: Go mod verification
         run: |
-          cd backend
           go mod tidy
           git diff --exit-code go.mod go.sum
       - name: Go vet
-        run: go vet ./...
+        run: |
+          go vet ./...
       - name: Format Go Code
         run: gofmt -s -w
       - name: Go fmt check
