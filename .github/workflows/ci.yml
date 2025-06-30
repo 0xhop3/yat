@@ -17,6 +17,7 @@ jobs:
           cache: true
       - name: Go mod verification
         run: |
+          cd backend
           go mod tidy
           git diff --exit-code go.mod go.sum
       - name: Go vet
