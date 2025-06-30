@@ -36,6 +36,8 @@ jobs:
             exit 1
           fi
           echo "✅ Code is formatted correctly"
+      - name: Download dependencies
+        run: go mod download
       - name: Go security check
         uses: securego/gosec@master
         with:
