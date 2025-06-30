@@ -36,7 +36,7 @@ jobs:
             gofmt -s -l .
             exit 1
           fi
-          echo: "✅ Code is formatted correctly"
+          echo "✅ Code is formatted correctly"
       - name: Go security check
         uses: securego/gosec@master
         with:
