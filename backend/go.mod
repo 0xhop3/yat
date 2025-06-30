@@ -1,4 +1,4 @@
-module github.com/0xhop3/yat/backend
+module github.com/yat/backend
 
 go 1.24.4
 
