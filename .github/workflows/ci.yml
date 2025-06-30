@@ -27,7 +27,7 @@ jobs:
       - name: Format Go Code
         run: |
           cd backend
-          gofmt -s -w
+          gofmt -s -w .
       - name: Go fmt check
         run: |
           cd backend
