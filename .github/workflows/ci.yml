@@ -7,6 +7,9 @@ on:
 jobs:
   lint:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -17,20 +20,16 @@ jobs:
           cache: true
       - name: Go mod verification
         run: |
-          cd backend
           go mod tidy
           git diff --exit-code go.mod go.sum
       - name: Go vet
         run: |
-          cd backend
           go vet ./...
       - name: Format Go Code
         run: |
-          cd backend
           gofmt -s -w .
       - name: Go fmt check
         run: |
-          cd backend
           if [ "$(gofmt -s -l . | wc -l)" -gt 0 ]; then
             echo "❌ Code is not formatted. Run 'gofmt -s -w .'"
             gofmt -s -l .
