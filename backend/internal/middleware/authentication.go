@@ -147,8 +147,8 @@ func (a *AuthenticationMiddleware) getOrCreateUser(claims *CustomClaims) (*model
 	// If user not found, create a new one
 	createRequest := &models.CreateUserRequest{
 		Auth0ID:  claims.Sub,
-		Username: claims.Name,
 		Name:     claims.Name,
+		Username: claims.Username,
 	}
 	return a.userService.CreateUser(createRequest)
 }
