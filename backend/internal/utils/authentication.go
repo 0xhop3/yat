@@ -25,7 +25,11 @@ func GetUserIDFromContext(c *gin.Context) (uuid.UUID, bool) {
 	}
 
 	id, ok := userID.(uuid.UUID)
-	return id, ok
+	if !ok {
+		return uuid.Nil, false
+	}
+
+	return id, true
 }
 
 // GetAuth0IDFromContext extracts Auth0 ID from gin context

@@ -1,7 +1,8 @@
 package services
 
 import (
-	"errors"
+	"fmt"
+
 	"github.com/0xhop3/yat/backend/internal/models"
 	"github.com/0xhop3/yat/backend/internal/repositories"
 
@@ -23,13 +24,14 @@ func (u *UserService) CreateUser(request *models.CreateUserRequest) (*models.Use
 	}
 
 	if existingUser != nil {
-		return nil, errors.New("User with this email already exists")
+		return nil, fmt.Errorf("%s already exists", existingUser.Auth0ID)
 	}
 
 	user := &models.User{
 		ID:       uuid.New(),
 		Auth0ID:  request.Auth0ID,
 		Username: request.Username,
+		Name:     request.Name,
 	}
 
 	err = u.userRepo.Create(user)

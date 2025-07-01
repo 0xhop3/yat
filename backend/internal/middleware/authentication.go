@@ -85,7 +85,7 @@ func (a *AuthenticationMiddleware) extractToken(ctx *gin.Context) (string, error
 		return "", fmt.Errorf("Authorization header required")
 	}
 
-	bearerToken := strings.Split(authenticationHeader, "")
+	bearerToken := strings.Split(authenticationHeader, " ")
 	if len(bearerToken) != 2 || bearerToken[0] != "Bearer" {
 		return "", fmt.Errorf("Invalid authorization header format")
 	}
@@ -137,18 +137,18 @@ func (a *AuthenticationMiddleware) getOrCreateUser(claims *CustomClaims) (*model
 	// Try to find existing user by Auth0 ID
 	user, err := a.userService.GetByAuth0ID(claims.Sub)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to get user by Auth0 ID: %w", err)
 	}
 
 	if user != nil {
 		return user, nil
 	}
 
+	// If user not found, create a new one
 	createRequest := &models.CreateUserRequest{
 		Auth0ID:  claims.Sub,
-		Username: "N13yx",
+		Username: claims.Name,
 		Name:     claims.Name,
 	}
-
 	return a.userService.CreateUser(createRequest)
 }

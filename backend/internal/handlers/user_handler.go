@@ -27,6 +27,7 @@ func (u *UserHandler) CreateUser(c *gin.Context) {
 
 	user, err := u.userService.CreateUser(&req)
 	if err != nil {
+		println("Error creating user:", &req.Auth0ID, err.Error())
 		utils.ErrorResponse(c, http.StatusBadRequest, "Failed to create user", err)
 		return
 	}

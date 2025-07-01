@@ -12,7 +12,7 @@ type UserRepository struct {
 }
 
 const (
-	userCreateQuery       = `INSERT INTO yat_users (id, auth0_id, username, name, created_at, updated_at) VALUES ($1, $2, $3, $4, NOW(), NOW()) RETURNING created_at, updated_at`
+	userCreateQuery       = `INSERT INTO yat_users (id, auth0_id, username, name) VALUES ($1, $2, $3, $4) RETURNING created_at, updated_at`
 	userGetByAuth0IDQuery = `SELECT * FROM yat_users WHERE auth0_id = $1`
 )
 
@@ -24,10 +24,8 @@ func (u *UserRepository) Create(user *models.User) error {
 	return u.db.QueryRow(userCreateQuery,
 		user.ID,
 		user.Auth0ID,
-		user.Name,
 		user.Username,
-		user.CreatedAt,
-		user.UpdatedAt).Scan(&user.CreatedAt, user.CreatedAt)
+		user.Name).Scan(&user.CreatedAt, &user.UpdatedAt)
 }
 
 func (u *UserRepository) GetByAuth0ID(auth0_id string) (*models.User, error) {
