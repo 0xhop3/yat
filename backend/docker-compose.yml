@@ -9,10 +9,10 @@ services:
       POSTGRES_USER: 0xskaper
       POSTGRES_PASSWORD: "061312"
     ports:
+      - "9090:9090"
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./setup_database.sql:/docker-entrypoint-initdb.d/setup_database.sql
 volumes:
   postgres_data:
     driver: local
