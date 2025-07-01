@@ -1,0 +1,46 @@
+name: Continuous Integration
+on:
+  push:
+    branches: [nexus, v0]
+  pull_request:
+    branches: [nexus]
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.24.4'
+          cache: true
+      - name: Go mod verification
+        run: |
+          go mod tidy
+          git diff --exit-code go.mod go.sum
+      - name: Go vet
+        run: |
+          go vet ./...
+      - name: Format Go Code
+        run: |
+          gofmt -s -w .
+      - name: Go fmt check
+        run: |
+          if [ "$(gofmt -s -l . | wc -l)" -gt 0 ]; then
+            echo "❌ Code is not formatted. Run 'gofmt -s -w .'"
+            gofmt -s -l .
+            exit 1
+          fi
+          echo "✅ Code is formatted correctly"
+      - name: Download dependencies
+        run: go mod download
+      - name: Go security check
+        run: |
+          go install github.com/securego/gosec/v2/cmd/gosec@latest
+          gosec ./...
+      - name: Docker compose Validation
+        run: "docker compose config -q \necho \"✅ Docker compose file is valid\"\n"

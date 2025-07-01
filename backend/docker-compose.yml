@@ -1,0 +1,22 @@
+name: yat
+services:
+  postgres:
+    image: postgres:17
+    container_name: yat_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: yat_db
+      POSTGRES_USER: 0xskaper
+      POSTGRES_PASSWORD: "061312"
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./setup_database.sql:/docker-entrypoint-initdb.d/setup_database.sql
+volumes:
+  postgres_data:
+    driver: local
+networks:
+  default:
+    driver: bridge
+    name: yat_network
